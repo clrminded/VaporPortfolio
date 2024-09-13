@@ -9,23 +9,45 @@
 
 import Vapor
 import SwiftHtml
+import SwiftSvg
+
+extension Svg {
+    
+    static func menuIcon() -> Svg {
+        Svg {
+            Line(x1: 3, y1: 12, x2: 21, y2: 12)
+            Line(x1: 3, y1: 6, x2: 21, y2: 6)
+            Line(x1: 3, y1: 18, x2: 21, y2: 18)
+        }
+        .width(24)
+        .height(24)
+        .viewBox(minX: 0, minY: 0, width: 24, height: 24)
+        .fill("none")
+        .stroke("currentColor")
+        .strokeWidth(2)
+        .strokeLinecap("round")
+        .strokeLinejoin("round")
+    }
+}
 
 
 public struct WebIndexTemplate: TemplateRepresentable {
     
     public var context: WebIndexContext
+    var body: Tag
     
-    public init(_ context: WebIndexContext) {
+    public init(
+        _ context: WebIndexContext,
+        @TagBuilder _ builder: () -> Tag
+    ) {
         self.context = context
+        self.body = builder()
     }
     
     @TagBuilder
-    public func render(_ req: Request) -> Tag
-    {
-        Html 
-        {
-            Head 
-            {
+    public func render(_ req: Request) -> Tag {
+        Html {
+            Head {
                 Meta()
                     .charset("utf-8")
                 Meta()
@@ -44,15 +66,72 @@ public struct WebIndexTemplate: TemplateRepresentable {
             }
             //: Head
             
-            Body 
-            {
-                Main 
-                {
-                    Section
-                    {
-                        H1(context.message)
+            Body {
+                Header {
+                    Div {
+                        A {
+                            Img(src: "/img/logo.png", alt: "Logo")
+                        }
+                        .id("site-logo")
+                        .href("/")
+                        //: A
+                        
+                        Nav {
+                            Input()
+                                .type(.checkbox)
+                                .id("primary-menu-button")
+                                .name("menu-button")
+                                .class("menu-button")
+                            Label {
+                                Svg.menuIcon()
+                            }
+                            .for("primary-menu-button")
+                            Div {
+                                A("Home")
+                                    .href("/")
+                                    .class("selected", req.url.path == "/")
+                                A("Blog")
+                                    .href("/blog/")
+                                    .class("selected", req.url.path == "/blog/")
+                                A("About")
+                                    .href("#")
+                                    .onClick("javascript:about();")
+                            }
+                            .class("menu-items")
+                            //: Div
+                        }
+                        .id("primary-menu")
+                        //: Nav
+                    }
+                    .id("navigation")
+                    //: Div
+                }
+                //: Header
+                
+                
+                Main {
+                    body
+                }
+                
+                Footer {
+                    Section {
+                        P {
+                            Text("This site is powered by ")
+                            A("Swift")
+                                .href("https://swift.org")
+                                .target(.blank)
+                            Text(" & ")
+                            A("Vapor")
+                                .href("https://vapor.codes")
+                                .target(.blank)
+                            Text(".")
+                        }
+                        P("myPage &copy; 2020-2024")
                     }
                 }
+                Script()
+                    .type(.javascript)
+                    .src("/js/web.js")
             }
             //: Body
             

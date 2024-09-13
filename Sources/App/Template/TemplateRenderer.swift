@@ -17,8 +17,7 @@ public struct TemplateRenderer {
     
     var req: Request
     
-    init(_ req: Request)
-    {
+    init(_ req: Request) {
         self.req = req
     }
     
@@ -26,8 +25,8 @@ public struct TemplateRenderer {
         _ template: TemplateRepresentable,
         minify: Bool = false,
         indent: Int = 4
-    ) -> Response
-    {
+    ) -> Response {
+        
         let doc = Document(.html) {
             template.render(req)
         }

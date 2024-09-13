@@ -8,11 +8,11 @@ func routes(_ app: Application) throws {
         
         req.templates.renderHtml(
             WebIndexTemplate(
-                WebIndexContext(
-                    title: "Home",
-                    message: "Hi there, welcome to my page!"
-                )
+                WebIndexContext(title: "Home")
             )
+            {
+                P("Hi there, welcome to my page!")
+            }
         )
         
     }
