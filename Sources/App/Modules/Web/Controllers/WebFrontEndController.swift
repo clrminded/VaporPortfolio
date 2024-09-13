@@ -20,11 +20,17 @@ struct WebFrontendController {
                 "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
                 "Nisi ut aliquip ex ea commodo consequat.",
             ],
-            link: .init(label: "Read my blog ->", url: "/blog/")
+            link: .init(
+                label: "Read my blog ->",
+                url: "/blog/"
+            ) 
+            
         )
         
         
         return req.templates.renderHtml(
+            
+            
             WebHomeTemplate(ctx)
         )
     }

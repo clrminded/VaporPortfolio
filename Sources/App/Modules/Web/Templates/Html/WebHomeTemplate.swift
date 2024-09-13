@@ -34,6 +34,7 @@ struct WebHomeTemplate: TemplateRepresentable {
                 }
                 
                 WebLinkTemplate(context.link).render(req)
+            
             }
             .id("home")
             .class("container")

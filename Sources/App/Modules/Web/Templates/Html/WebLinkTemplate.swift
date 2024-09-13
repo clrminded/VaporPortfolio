@@ -19,7 +19,10 @@ struct WebLinkTemplate: TemplateRepresentable {
     }
     
     @TagBuilder
-    func render(_ req: Request) -> Tag {
+    func render(
+        _ req: Request
+    ) -> Tag {
         A(context.label)
+            .href(context.url)
     }
 }
