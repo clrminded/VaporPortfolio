@@ -9,6 +9,14 @@ public func configure(_ app: Application) async throws {
     )
     app.middleware.use(fileMiddleware)
     
-    // register routes
-    try routes(app)
+    app.middleware.use(ExtendPathMiddleware())
+    
+    let routers: [RouteCollection] = [
+        WebRouter(),
+        BlogRouter(),
+    ]
+    
+    for router in routers {
+        try router.boot(routes: app.routes)
+    }
 }
