@@ -13,6 +13,9 @@ struct UserRouter: RouteCollection
     func boot(routes: RoutesBuilder) throws
     {        
         routes.get("sign-in", use: frontendController.signInView)
+        
+        routes.grouped(UserCredentialsAuthenticator())
+        
         routes.post("sign-in", use: frontendController.signInAction)
     }
 }
