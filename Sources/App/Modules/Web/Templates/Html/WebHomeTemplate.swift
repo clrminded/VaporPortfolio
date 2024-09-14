@@ -1,22 +1,20 @@
-//
-//  WebHomeTemplate.swift
-//
-//
-//
-
 import Vapor
 import SwiftHtml
 
 struct WebHomeTemplate: TemplateRepresentable {
-    
+
     var context: WebHomeContext
     
-    init(_ context: WebHomeContext) {
+    init(
+        _ context: WebHomeContext
+    ) {
         self.context = context
     }
-    
+
     @TagBuilder
-    func render(_ req: Request) -> Tag {
+    func render(
+        _ req: Request
+    ) -> Tag {
         WebIndexTemplate(
             .init(title: context.title)
         ) {
@@ -27,19 +25,16 @@ struct WebHomeTemplate: TemplateRepresentable {
                     P(context.message)
                 }
                 .class("lead")
-                //: Section
-                
+
                 for paragraph in context.paragraphs {
                     P(paragraph)
                 }
-                
+
                 WebLinkTemplate(context.link).render(req)
             }
             .id("home")
             .class("container")
-            //: Div
         }
         .render(req)
     }
 }
-

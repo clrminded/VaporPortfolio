@@ -1,22 +1,29 @@
 import Vapor
+import Fluent
+import FluentSQLiteDriver
 
-// configures your application
-public func configure(_ app: Application) async throws {
-   
-    // Serves files from `Public/` directory
-    let fileMiddleware = FileMiddleware(
-        publicDirectory: app.directory.publicDirectory
+public func configure(
+    _ app: Application
+) throws {
+
+    let dbPath = app.directory.resourcesDirectory + "db.sqlite"
+    app.databases.use(.sqlite(.file(dbPath)), as: .sqlite)
+    
+    app.middleware.use(
+        FileMiddleware(
+            publicDirectory: app.directory.publicDirectory
+        )
     )
-    app.middleware.use(fileMiddleware)
-    
+
     app.middleware.use(ExtendPathMiddleware())
-    
-    let routers: [RouteCollection] = [
-        WebRouter(),
-        BlogRouter(),
+
+    let modules: [ModuleInterface] = [
+        WebModule(),
+        BlogModule(),
     ]
-    
-    for router in routers {
-        try router.boot(routes: app.routes)
+    for module in modules {
+        try module.boot(app)
     }
+    
+    try app.autoMigrate().wait()
 }

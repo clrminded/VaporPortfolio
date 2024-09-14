@@ -1,12 +1,3 @@
-//
-//  WebIndexTemplate.swift
-//  
-//
-//  This is the template for the index.html file.
-//  By using SwiftHtml, we will be able to mock where everything
-//  will go in a concise manner.
-//
-
 import Vapor
 import SwiftHtml
 import SwiftSvg
@@ -30,12 +21,11 @@ extension Svg {
     }
 }
 
-
 public struct WebIndexTemplate: TemplateRepresentable {
-    
+
     public var context: WebIndexContext
     var body: Tag
-    
+
     public init(
         _ context: WebIndexContext,
         @TagBuilder _ builder: () -> Tag
@@ -43,9 +33,11 @@ public struct WebIndexTemplate: TemplateRepresentable {
         self.context = context
         self.body = builder()
     }
-    
+
     @TagBuilder
-    public func render(_ req: Request) -> Tag {
+    public func render(
+        _ req: Request
+    ) -> Tag {
         Html {
             Head {
                 Meta()
@@ -53,7 +45,7 @@ public struct WebIndexTemplate: TemplateRepresentable {
                 Meta()
                     .name(.viewport)
                     .content("width=device-width, initial-scale=1")
-                
+
                 Link(rel: .shortcutIcon)
                     .href("/img/favicon.ico")
                     .type("image/x-icon")
@@ -64,8 +56,6 @@ public struct WebIndexTemplate: TemplateRepresentable {
                 
                 Title(context.title)
             }
-            //: Head
-            
             Body {
                 Header {
                     Div {
@@ -74,7 +64,6 @@ public struct WebIndexTemplate: TemplateRepresentable {
                         }
                         .id("site-logo")
                         .href("/")
-                        //: A
                         
                         Nav {
                             Input()
@@ -98,21 +87,16 @@ public struct WebIndexTemplate: TemplateRepresentable {
                                     .onClick("javascript:about();")
                             }
                             .class("menu-items")
-                            //: Div
                         }
                         .id("primary-menu")
-                        //: Nav
                     }
                     .id("navigation")
-                    //: Div
                 }
-                //: Header
-                
                 
                 Main {
                     body
                 }
-                
+
                 Footer {
                     Section {
                         P {
@@ -126,15 +110,15 @@ public struct WebIndexTemplate: TemplateRepresentable {
                                 .target(.blank)
                             Text(".")
                         }
-                        P("myPage &copy; 2020-2024")
+                        P("myPage &copy; 2020-2022")
                     }
                 }
+                
                 Script()
                     .type(.javascript)
                     .src("/js/web.js")
+                
             }
-            //: Body
-            
         }
         .lang("en-US")
     }

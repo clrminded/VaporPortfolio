@@ -1,11 +1,4 @@
-//
-//  File.swift
-//  
-//
-
-
 import Vapor
-
 
 struct WebFrontendController {
     
@@ -13,16 +6,18 @@ struct WebFrontendController {
         let ctx = WebHomeContext(
             icon: "👋",
             title: "Home",
-            message: "Hi there, welcome to my page",
+            message: "Hi there, welcome to my page.",
             paragraphs: [
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                 "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                 "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
                 "Nisi ut aliquip ex ea commodo consequat.",
             ],
-            link: .init(label: "Read my blog ->", url: "/blog/")
+            link: .init(
+                label: "Read my blog →",
+                url: "/blog/"
+            )
         )
-        
         
         return req.templates.renderHtml(
             WebHomeTemplate(ctx)

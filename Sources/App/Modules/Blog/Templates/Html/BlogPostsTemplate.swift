@@ -1,9 +1,3 @@
-//
-//  BlogPostsTemplate.swift
-//
-//
-//  Themplate for all the blog posts
-
 import Vapor
 import SwiftHtml
 
@@ -11,12 +5,16 @@ struct BlogPostsTemplate: TemplateRepresentable {
     
     var context: BlogPostsContext
     
-    init(_ context: BlogPostsContext) {
+    init(
+        _ context: BlogPostsContext
+    ) {
         self.context = context
     }
-    
+
     @TagBuilder
-    func render(_ req: Request) -> Tag {
+    func render(
+        _ req: Request
+    ) -> Tag {
         WebIndexTemplate(
             .init(title: context.title)
         ) {
@@ -27,7 +25,7 @@ struct BlogPostsTemplate: TemplateRepresentable {
                     P(context.message)
                 }
                 .class("lead")
-                
+
                 Div {
                     for post in context.posts {
                         Article {
@@ -36,7 +34,7 @@ struct BlogPostsTemplate: TemplateRepresentable {
                                 H2(post.title)
                                 P(post.excerpt)
                             }
-                            .href("/\(post.slug)")
+                            .href("/\(post.slug)/")
                         }
                     }
                 }

@@ -1,17 +1,13 @@
-//
-//  BlogPostTemplate.swift
-//
-//
-//  Template for the page of a single blog post
-
 import Vapor
 import SwiftHtml
 
 struct BlogPostTemplate: TemplateRepresentable {
-    
+
     var context: BlogPostContext
     
-    init(_ context: BlogPostContext) {
+    init(
+        _ context: BlogPostContext
+    ) {
         self.context = context
     }
     
@@ -21,20 +17,21 @@ struct BlogPostTemplate: TemplateRepresentable {
         formatter.timeStyle = .short
         return formatter
     }()
-    
-    
+
     @TagBuilder
-    func render(_ req: Request) -> Tag {
-        WebIndexTemplate(.init(
-            title: context.post.title))
-        {
+    func render(
+        _ req: Request
+    ) -> Tag {
+        WebIndexTemplate(
+            .init(title: context.post.title)
+        ) {
             Div {
                 Section {
                     P(dateFormatter.string(from: context.post.date))
                     H1(context.post.title)
                     P(context.post.excerpt)
                 }
-                .class("lead", "container")
+                .class(["lead", "container"])
                 
                 Img(src: context.post.image, alt: context.post.title)
                 

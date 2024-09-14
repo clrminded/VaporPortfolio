@@ -1,10 +1,3 @@
-//
-//  WebHomeContext.swift
-//
-//
-//  
-//
-
 struct WebHomeContext {
     let icon: String
     let title: String
