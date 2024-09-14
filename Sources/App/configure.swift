@@ -16,9 +16,14 @@ public func configure(
     )
 
     app.middleware.use(ExtendPathMiddleware())
+    
+    app.sessions.use(.fluent)
+    app.migrations.add(SessionRecord.migration)
+    app.middleware.use(app.sessions.middleware)
 
     let modules: [ModuleInterface] = [
         WebModule(),
+        UserModule(),
         BlogModule(),
     ]
     for module in modules {
