@@ -54,4 +54,12 @@ struct UserFrontendController
             "Invalid email or password"
         )
     }
+    
+    func signOut(req: Request) throws -> Response
+    {
+        req.auth.logout(AuthenticatedUser.self)
+        req.session.unauthenticate(AuthenticatedUser.self)
+        // req.session.destroy()
+        return req.redirect(to: "/")
+    }
 }

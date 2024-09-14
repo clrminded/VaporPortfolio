@@ -14,8 +14,12 @@ struct UserRouter: RouteCollection
     {        
         routes.get("sign-in", use: frontendController.signInView)
         
-        routes.grouped(UserCredentialsAuthenticator())
+        routes
+            .grouped(
+                UserCredentialsAuthenticator()
+            )
+            .post("sign-in", use: frontendController.signInAction)
         
-        routes.post("sign-in", use: frontendController.signInAction)
+        routes.get("sign-out", use: frontendController.signOut)
     }
 }
