@@ -1,7 +1,7 @@
 //
 //  UserAccountModel.swift
 //
-//
+//  1)
 //  In order to login with a given email and password combination
 //  well have to create a model for user account objects.
 
