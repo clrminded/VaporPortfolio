@@ -15,6 +15,18 @@ open class AbstractFormField<
     public var output: Output
     public var error: String?
     
+    // MARK: - event blocks
+    
+    public typealias FormFieldBlock =
+    (Request, AbstractFormField<Input, Output>) async throws -> Void
+    
+    private var readBlock: FormFieldBlock?
+    private var writeBlock: FormFieldBlock?
+    private var loadBlock: FormFieldBlock?
+    private var saveBlock: FormFieldBlock?
+    
+    // MARK: - init & config
+    
     public init(
         key: String,
         input: Input,
@@ -34,6 +46,30 @@ open class AbstractFormField<
         block(self)
         return self
     }
+    
+    // MARK: - Block setters
+    
+    open func read(_ block: @escaping FormFieldBlock) -> Self {
+        readBlock = block
+        return self
+    }
+    
+    open func write(_ block: @escaping FormFieldBlock) -> Self {
+        writeBlock = block
+        return self
+    }
+    
+    open func load(_ block: @escaping FormFieldBlock) -> Self {
+        loadBlock = block
+        return self
+    }
+    
+    open func save(_ block: @escaping FormFieldBlock) -> Self {
+        saveBlock = block
+        return self
+    }
+    
+    // MARK: - FormComponent
     
     open func load(req: Vapor.Request) async throws {
          
