@@ -10,23 +10,18 @@ import Vapor
 
 struct UserFrontendController
 {
-    private struct Input: Decodable
-    {
-        let email: String?
-        let password: String?
-    }
-    
+
     private func renderSignInView(
         _ req: Request,
-        _ input: Input? = nil,
-        _ error: String? = nil
+        _ form: UserLoginForm
     ) -> Response
     {
         let template = UserLoginTemplate(
             .init(
                 icon: "⬇️",
                 title: "Sign in",
-                message: "Please log in with your existing account"
+                message: "Please log in with your existing account",
+                form: form.render(req: req)
             )
         )
         return req.templates.renderHtml(template)
@@ -35,7 +30,7 @@ struct UserFrontendController
     
     func signInView(_ req: Request) async throws -> Response
     {
-        renderSignInView(req)
+        renderSignInView(req, .init())
     }
     
     func signInAction(_ req: Request) async throws -> Response
@@ -46,13 +41,10 @@ struct UserFrontendController
             req.session.authenticate(user)
             return req.redirect(to: "/")
         }
-        /// if the user credentials were wrong we render the form again with an error
-        let input = try req.content.decode(Input.self)
-        return renderSignInView(
-            req,
-            input,
-            "Invalid email or password"
-        )
+        let form = UserLoginForm()
+        try await form.process(req: req)
+        form.error = "Invalid email or password."
+        return renderSignInView(req,form)
     }
     
     func signOut(req: Request) throws -> Response
