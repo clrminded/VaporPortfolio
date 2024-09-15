@@ -16,7 +16,7 @@ open class AbstractFormField<
     public var error: String?
     
     // MARK: - event blocks
-    
+    // By using this alias we can simplify other function signatures alot
     public typealias FormFieldBlock =
     (Request, AbstractFormField<Input, Output>) async throws -> Void
     
