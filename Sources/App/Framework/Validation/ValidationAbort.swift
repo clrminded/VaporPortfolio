@@ -1,5 +1,5 @@
 //
-//  ValidationError.swift
+//  ValidationAbort.swift
 //
 //
 //  This is going to be the structure of the error details if
@@ -10,7 +10,7 @@
 
 import Vapor
 
-public struct ValidationError: AbortError
+public struct ValidationAbort: AbortError
 {
     public var abort: Abort
     public var message: String?
