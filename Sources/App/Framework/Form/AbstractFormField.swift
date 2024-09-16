@@ -19,11 +19,14 @@ open class AbstractFormField<
     // By using this alias we can simplify other function signatures alot
     public typealias FormFieldBlock =
     (Request, AbstractFormField<Input, Output>) async throws -> Void
+    public typealias FormFieldValidatorsBlock =
+    ((Request, AbstractFormField<Input, Output>) -> [AsyncValidator])
     
     private var readBlock: FormFieldBlock?
     private var writeBlock: FormFieldBlock?
     private var loadBlock: FormFieldBlock?
     private var saveBlock: FormFieldBlock?
+    private var validatorBlock: FormFieldValidatorsBlock?
     
     // MARK: - init & config
     
@@ -69,11 +72,14 @@ open class AbstractFormField<
         return self
     }
     
-    // MARK: - FormComponent
-    
-    open func load(req: Vapor.Request) async throws {
-         
+    open func validators(
+        @AsyncValidatorBuilder _ block: @escaping FormFieldValidatorsBlock
+    ) -> Self {
+        validatorBlock = block
+        return self
     }
+    
+    // MARK: - FormComponent
     
     open func process(req: Vapor.Request) async throws {
         if let value = try? req.content.get(Input.self, at: key) {
@@ -82,19 +88,26 @@ open class AbstractFormField<
     }
     
     open func validate(req: Vapor.Request) async throws -> Bool {
-        true
-    }
-    
-    open func write(req: Vapor.Request) async throws {
-        
-    }
-    
-    open func save(req: Vapor.Request) async throws {
-        
+        guard let validators = validatorBlock else {
+            return true
+        }
+        return await RequestValidator(validators(req, self)).isValid(req)
     }
     
     open func read(req: Vapor.Request) async throws {
-        
+        try await readBlock?(req, self)
+    }
+    
+    open func write(req: Vapor.Request) async throws {
+        try await writeBlock?(req, self)
+    }
+    
+    open func load(req: Vapor.Request) async throws {
+        try await loadBlock?(req, self)
+    }
+    
+    open func save(req: Vapor.Request) async throws {
+        try await saveBlock?(req, self)
     }
     
     open func render(req: Vapor.Request) -> TemplateRepresentable {
