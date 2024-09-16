@@ -43,7 +43,10 @@ struct UserFrontendController
         }
         let form = UserLoginForm()
         try await form.process(req: req)
-        form.error = "Invalid email or password."
+        let isValid = try await form.validate(req: req)
+        if !isValid {
+            form.error = "Invalid email or password."
+        }
         return renderSignInView(req,form)
     }
     
