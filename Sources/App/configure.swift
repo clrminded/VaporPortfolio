@@ -1,10 +1,23 @@
 import Vapor
 import Fluent
 import FluentSQLiteDriver
+import Liquid
+import LiquidLocalDriver
 
 public func configure(
     _ app: Application
 ) throws {
+    
+    app.fileStorages.use(
+        .local(
+            publicUrl: "http://localhost:8080",
+            publicPath: app.directory.publicDirectory,
+            workDirectory: "assets"
+        ),
+        as: .local
+    )
+    
+    app.routes.defaultMaxBodySize = "10mb"
 
     let dbPath = app.directory.resourcesDirectory + "db.sqlite"
     app.databases.use(.sqlite(.file(dbPath)), as: .sqlite)
